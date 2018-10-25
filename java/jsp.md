@@ -23,3 +23,5 @@
     3. sql  sql         与数据库交互
     4. x    xml         创建和操作xml文档
     5. fn   functions   字符串处理
+
+4. 只有当该页面是`isErroePage = true`时, 才能使用`exception`
