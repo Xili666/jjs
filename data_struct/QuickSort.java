@@ -41,12 +41,6 @@ public class QuickSort {
         return start;
     }
 
-    private static void swap(int[] array, int m, int n) {
-        int temp = array[m];
-        array[m] = array[n];
-        array[n] = temp;
-    }
-
     private static void debugLine(int[] array) {
         for (int h : array) {
             System.out.print(h + " ");

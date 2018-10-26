@@ -9,6 +9,9 @@ public class HeapSort {
     }
 
     private static void sort(int[] array) {
+        if (array == null || array.length == 0) {
+            return;
+        }
         buildMaxHeap(array);
         debugLine(array);
         for (int i = array.length - 1; i > 0; i--) {
@@ -24,9 +27,6 @@ public class HeapSort {
      * @param array
      */
     private static void buildMaxHeap(int[] array) {
-        if (array == null || array.length == 0) {
-            return;
-        }
         int half = (array.length >> 1) - 1;
         for (int i = half; i >= 0; i--) {
             maxHeap(array, array.length, i);

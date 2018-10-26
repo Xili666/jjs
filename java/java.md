@@ -105,3 +105,119 @@
     4. 对象操作: Serializable
     5. 网络操作: Socket
     6. 新的输入输出: NIO
+23. java.util包下的集合类都是快速失败的(检测到修改之间抛异常)
+24. java.util.concurrent包下的集合都是安全失败的(会复制)
+25. PriorityQueue是一个基于优先级堆的无界队列
+26. cache块在处理异常时, 从上到下处理, 捕获到异常直接跳出
+    ```java
+    try {
+        throw new FileNotFoundException("exception");
+    }catch (FileNotFoundException e){
+        System.out.println("FileNotFoundException");
+    }catch (IOException e2){
+        System.out.println("IOException");
+    }catch (Exception e3){
+        System.out.println("Exception");
+    }
+    // FileNotFoundException
+    ```
+    如果将大异常写在小异常前, 编译出错
+27. Swing使用了MVC设计模式
+28. Class.forName() 和 ClassLoader.loadClass(), 前者会对目标对象进行链接
+29. `GenericServlet`类实现了`Servlet`和`ServletConfig`接口, 实现除了`service()`之外的其它方法
+30. `HttpServlet`类继承了`GenericServlet`类, 实现了`service()`方法, 并且添加了`doXXX()`方法
+31. Servlet的生命周期:
+    1. 服务器为客户端第一次请求调用`init()`方法初始化`Servlet`
+    2. 为每个请求调用`service()`方法
+    3. 在`Servlet`关闭的时候调用`destroy()`方法
+32. Servlet链(Servlet Chaining): `Servlet Chaining`是一个把Servlet输出发送给另一个Servlet的方法, 由最后一个Servlet负责把响应发给服务端
+33. Http 响应的结构:
+    1. 状态码 (status code)
+    2. 响应头 (response headers)
+    3. 主体 (body)
+34. cookies只能存储字符串, session可以存储任意对象
+35. HTTP隧道: 把其它请求掩盖成HTTP请求
+36. 面向对象开发的优点:
+    1. 代码开发模块化, 更易维护和修改
+    2. 代码复用
+    3. 增强代码的可靠性和灵活性
+    4. 增强代码的可理解性
+    5. 面向对象编程的重要特性: 封装, 继承, 多态, 抽象
+37. 封装的定义和好处：
+    1. 定义
+        1. 封装给对象提供了隐藏内部特性和行为的能力
+        2. 对象提供一些能被其他对象访问的方法来改变它内部的数据
+        3. 在Java当中，有3种修饰符：public，private和protected。每一种修饰符给其他的位于同一个包或者不同包下面对象赋予了不同的访问权限
+    2. 好处
+        1. 通过隐藏对象的属性来保护对象内部的状态
+        2. 提高了代码的可用性和可维护性，因为对象的行为可以被单独的改变或者是扩展
+        3. 禁止对象之间的不良交互提高模块化
+38. 继承的定义：
+    1. 继承给对象提供了从基类获取字段和方法的能力
+    2. 继承提高了代码的重用性, 也可以在不修改类的情况下给现存的类添加新特性
+39. 多态的定义：
+    1. 多态是编程语言给不同的底层数据类型做相同的接口展示的一种能力
+    2. 一个多态类型的操作可以应用到其它类型的值上面
+40. 抽象的定义:
+    1. 抽象是把想法从具体的实例中分离出来的步骤, 因此要根据他们的功能二不说实现细节来创建类
+    2. Java支持创建只暴露接口二不包含方法实现的抽象类, 这种技术的主要目的是把类的行为和实现细节分离开
+41. 抽象和封装:
+    1. 抽象和封装是互补的概念
+        1. 抽象关注对象的行为
+        2. 封装关注对象的细节
+    2. 一般是通过隐藏对象内部的状态信息做到封装, 因此封装可以看成是用来提供抽象的一种策略
+
+42. Java使用动态代理示例:
+    ```java
+    import java.lang.reflect.InvocationHandler;
+    import java.lang.reflect.Method;
+    import java.lang.reflect.Proxy;
+
+    interface Car {
+        void run();
+    }
+
+    class SmallCar implements Car {
+
+        @Override
+        public void run() {
+            System.out.println("愉快地玩耍");
+        }
+    }
+
+    class CarProxy implements InvocationHandler {
+
+        private Object obj;
+
+        public CarProxy(Object obj) {
+            this.obj = obj;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            System.out.println(method.getName() + " start...");
+            Object result = method.invoke(obj, args);
+            System.out.println(method.getName() + " end...");
+            return result;
+        }
+    }
+
+    public class DynamicProxy {
+        public static void main(String[] args) {
+            Car car = (Car) Proxy.newProxyInstance(Car.class.getClassLoader(), new Class[]{Car.class},   new CarProxy(new SmallCar()));
+            car.run();
+        }
+    }
+    ```
+
+43. `public static Object newProxyInstance(ClassLoader loader,
+                                          Class<?>[] interfaces,
+                                          InvocationHandler h)
+        throws IllegalArgumentException`:
+    
+    参数
+    1. loader：由指定的ClassLoader对象来加载生成的代理对象
+    2. interfaces：一个接口数组，指代理对象需要实现的接口列表，如果指定了接口，那么代理对象将实现指定的接口，这样我们就可以通过接口来调用方法
+    3. 一个InvocationHander对象，表示调用代理对象方法的时候会调用哪一个InvocationHander对象的invoke方法
+    
+    返回值: Object：动态生成的代理对象
